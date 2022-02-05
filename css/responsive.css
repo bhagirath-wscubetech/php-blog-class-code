@@ -1,0 +1,15 @@
+@media only screen and (min-width:0px) and (max-width:576px) {
+    #custom-navbar .nav-link {
+        padding-left: 0;
+        /* 1 = 16px */
+    }
+    #mySlider .carousel-item img {
+        height: 300px;
+    }
+}
+
+@media only screen and (min-width:576px) and (max-width:768px) {
+    #mySlider .carousel-item img {
+        height: 400px;
+    }
+}
