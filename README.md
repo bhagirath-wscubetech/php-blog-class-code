@@ -1,0 +1,1 @@
+# php-blog-class-code
