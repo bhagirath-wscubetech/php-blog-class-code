@@ -5,23 +5,26 @@ $error = 0;
 $msg = "";
 // 0 No error, 1: Some error
 if (isset($_POST['save'])) {
-    $title = $_POST['title'];
-    $desc = $_POST['desc'];
-    if (!empty($title) && !empty($desc)) {
+    $dataTitle = $_POST['title'];
+    $dataDesc = $_POST['desc'];
+    if (!empty($dataTitle) && !empty($dataDesc)) {
         // all okay
-        $qry = "INSERT INTO announcements SET title = '$title', description = '$desc'";
-        $flag = mysqli_query($conn,$qry);
-        if($flag == true){
+        // if data is not empty then execute insert query
+        /**
+         * INSERT INTO <table_name> SET <col1_name> = <data1>, <col2_name> = <data2>, ..... . <coln_name> = <datan>;
+         */
+        $qry = "INSERT INTO announcements SET title = '$dataTitle', description = '$dataDesc'";
+        $flag = mysqli_query($conn, $qry); // execute
+        if ($flag == true) {
             $error = 0;
             $msg = "Data added successfully";
-        }else{
-            // $errorList = mysqli_error_list($conn);
-            // p($errorList);
+        } else {
             $error = 1;
             $msg = "Unable to add data, Internal server error";
         }
     } else {
         // some error
+        // else thrown error
         $error = 1;
         $msg = "Please fill all the data";
     }
@@ -40,6 +43,7 @@ include "layouts/header.php";
             <!-- Message section -->
             <?php
             if ($msg != "") :
+                // if message is not empty then print the section
             ?>
                 <div class="alert <?php echo $error == 1 ? 'alert-warning' : 'alert-success' ?> alert-dismissible fade show" role="alert">
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -71,7 +75,6 @@ include "layouts/header.php";
         </div>
     </div>
 </div>
-
 <?php
 include "layouts/footer.php";
 ?>
