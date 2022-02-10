@@ -68,7 +68,7 @@
     </header>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-2 p-0 bg-primary text-white" style="height: 100vh;">
+            <div class="col-2 p-0 bg-primary text-white" style="min-height: 100vh;">
                 <ul id="sideMenu">
                     <li>
                         <i class="far fa-window-maximize"></i>

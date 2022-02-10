@@ -3,7 +3,7 @@ include "../app/database.php";
 include "../app/helper.php";
 include "layouts/header.php";
 ?>
-<div class="col-10" style="height: 100vh;">
+<div class="col-10" style="min-height: 100vh;">
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 text-center mt-2">
