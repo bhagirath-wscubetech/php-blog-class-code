@@ -3,6 +3,33 @@ include "../app/database.php";
 include "../app/helper.php";
 $error = 0;
 $msg = "";
+$id = $_GET['id'];
+$status = $_GET['status'];
+if (isset($id)) {
+    if (isset($status)) {
+        // change status
+        $qry = "UPDATE announcements SET status = $status WHERE id = $id";
+        $flag = mysqli_query($conn, $qry);
+        if ($flag == true) {
+            $error = 0;
+            $msg = "Status changed successfully";
+        } else {
+            $error = 1;
+            $msg = "Unable to change the status. Internal server error";
+        }
+    } else {
+        // delete data
+        $qry = "DELETE FROM announcements WHERE id = $id";
+        $flag = mysqli_query($conn, $qry);
+        if ($flag == true) {
+            $error = 0;
+            $msg = "Data deleted successfully";
+        } else {
+            $error = 1;
+            $msg = "Unable to delete the data. Internal server error";
+        }
+    }
+}
 include "layouts/header.php";
 ?>
 <div class="col-10" style="min-height: 100vh;">
@@ -63,30 +90,36 @@ include "layouts/header.php";
                                 <?php
                                 if ($data['status'] == 1) :
                                 ?>
-                                    <button class="btn btn-primary">
-                                        Active
-                                    </button>
+                                    <a href="view-announcement.php?id=<?php echo $data['id'] ?>&status=0">
+                                        <button class="btn btn-primary">
+                                            Active
+                                        </button>
+                                    </a>
                                 <?php
                                 else :
                                 ?>
-                                    <button class="btn btn-warning">
-                                        Inactive
-                                    </button>
+                                    <a href="view-announcement.php?id=<?php echo $data['id'] ?>&status=1">
+                                        <button class="btn btn-warning">
+                                            Inactive
+                                        </button>
+                                    </a>
                                 <?php
                                 endif;
                                 ?>
                             </td>
                             <td>
-                                <button class="btn">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                <a href="view-announcement.php?id=<?php echo $data['id'] ?>">
+                                    <button class="btn">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </a>
                                 <button class="btn">
                                     <i class="fa fa-pen"></i>
                                 </button>
                             </td>
                         </tr>
                     <?php
-                    $sr++;
+                        $sr++;
                     endwhile;
                     ?>
                     <!-- <tr>
