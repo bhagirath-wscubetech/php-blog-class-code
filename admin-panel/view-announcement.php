@@ -113,9 +113,11 @@ include "layouts/header.php";
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </a>
-                                <button class="btn">
-                                    <i class="fa fa-pen"></i>
-                                </button>
+                                <a href="add-announcement.php?id=<?php echo $data['id']; ?>">
+                                    <button class="btn">
+                                        <i class="fa fa-pen"></i>
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                     <?php
