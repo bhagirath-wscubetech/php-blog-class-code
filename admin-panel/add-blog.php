@@ -4,16 +4,29 @@ include "../app/helper.php";
 $error = 0;
 $msg = "";
 $id = $_GET['id'];
+if (isset($id)) {
+    // fetch data for the id
+    $sel = "SELECT * FROM blogs WHERE id = $id";
+    $exe = mysqli_query($conn, $sel);
+    $data = mysqli_fetch_assoc($exe);
+}
 // 0 No error, 1: Some error
 if (isset($_POST['save'])) {
+    $imageName = $data['image_name'] ?? "";
     $image = $_FILES['image'];
-    p($image);
-    $tmpPath = $image['tmp_name'];
-    $imageName = time() . rand(1000, 9999) . $image['name'];
-    $path = "../images/blog/";
-    $destination = $path . $imageName;
-    // Uploading file to the destination
-    move_uploaded_file($tmpPath, $destination);
+    if ($image['name'] != "") {
+        $oldName = $imageName;
+        // is there any new image
+        $tmpPath = $image['tmp_name'];
+        $imageName = time() . rand(1000, 9999) . $image['name'];
+        $path = "../images/blog/";
+        $destination = $path . $imageName;
+        $flag = move_uploaded_file($tmpPath, $destination);
+        if($flag){
+            // new image uploaded, then delete the old one
+            unlink("../images/blog/$oldName");
+        }
+    }
     $dataTitle = $_POST['title'];
     $dataDesc = $_POST['desc'];
     $dataCategory = $_POST['category'];
@@ -22,7 +35,11 @@ if (isset($_POST['save'])) {
             // try starts here
             if (isset($id)) {
                 // update
-                // $qry = "UPDATE announcements SET title = '$dataTitle', description = '$dataDesc' WHERE id = $id";
+                $qry = "UPDATE blogs SET title = '$dataTitle', 
+                        description = '$dataDesc', 
+                        image_name = '$imageName', 
+                        category_id = $dataCategory 
+                        WHERE id = $id";
             } else {
                 // insert
                 $qry = "INSERT INTO blogs SET title = '$dataTitle', description = '$dataDesc', image_name = '$imageName', category_id = $dataCategory";
@@ -50,12 +67,7 @@ if (isset($_POST['save'])) {
     }
 }
 
-if (isset($id)) {
-    // fetch data for the id
-    $sel = "SELECT * FROM announcements WHERE id = $id";
-    $exe = mysqli_query($conn, $sel);
-    $data = mysqli_fetch_assoc($exe);
-}
+
 
 $selCat = "SELECT * FROM categories WHERE status = 1";
 $exeCat = mysqli_query($conn, $selCat);
@@ -95,10 +107,11 @@ include "layouts/header.php";
                 <div class="col-md-12">
                     <label class="form-label">Category</label>
                     <select name="category" id="" class="form-control">
+                        <option value="">Select a category</option>
                         <?php
                         while ($catData = mysqli_fetch_assoc($exeCat)) :
                         ?>
-                            <option value="<?php echo $catData['id'] ?>">
+                            <option value="<?php echo $catData['id'] ?>" <?php echo $catData['id'] == $data['category_id'] ? 'selected' : '' ?>>
                                 <?php echo $catData['name']; ?>
                             </option>
                         <?php
@@ -108,7 +121,7 @@ include "layouts/header.php";
                 </div>
                 <div class="col-md-12">
                     <label for="form-label">Image</label>
-                    <input type="file" name="image" class="dropify" data-allowed-file-extensions="png jpg jpeg gif">
+                    <input type="file" name="image" class="dropify" data-default-file="../images/blog/<?php echo $data['image_name'] ?>" data-allowed-file-extensions="png jpg jpeg gif">
                 </div>
                 <div class="col-md-12">
                     <label class="form-label">Description</label>

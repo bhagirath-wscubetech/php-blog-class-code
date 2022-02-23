@@ -2,6 +2,8 @@
 include "app/database.php";
 include "app/helper.php";
 include "layout/header.php";
+$selBlog = "SELECT * FROM blogs WHERE status = 1 AND featured = 1 ORDER BY id DESC";
+$exeBlog = mysqli_query($conn, $selBlog);
 ?>
 <!-- Slider section -->
 <section class="container-fluid p-0">
@@ -61,36 +63,22 @@ include "layout/header.php";
         </h2>
     </div>
     <div class="row my-3">
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://picsum.photos/300/150?random=5" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Title 1</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        <?php
+        while ($blogData = mysqli_fetch_assoc($exeBlog)) :
+        ?>
+            <div class="col-md-3">
+                <div class="card">
+                    <img src="images/blog/<?php echo $blogData['image_name'] ?>" height="200" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title"><?php echo $blogData['title'] ?></h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://picsum.photos/300/150?random=6" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Title 2</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://picsum.photos/300/150?random=7" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Title 3</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        </div>
+        <?php
+        endwhile;
+        ?>
     </div>
 </section>
 <!-- Featured Blogs -->

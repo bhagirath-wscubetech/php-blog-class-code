@@ -5,6 +5,7 @@ $error = 0;
 $msg = "";
 $id = $_GET['id'];
 $status = $_GET['status'];
+$featured = $_GET['featured'];
 if (isset($id)) {
     if (isset($status)) {
         // change status
@@ -16,6 +17,16 @@ if (isset($id)) {
         } else {
             $error = 1;
             $msg = "Unable to change the status. Internal server error";
+        }
+    } elseif (isset($featured)) {
+        $qry = "UPDATE blogs SET featured = $featured WHERE id = $id";
+        $flag = mysqli_query($conn, $qry);
+        if ($flag == true) {
+            $error = 0;
+            $msg = "Featured changed successfully";
+        } else {
+            $error = 1;
+            $msg = "Unable to change the featured. Internal server error";
         }
     } else {
         // delete data
@@ -63,7 +74,7 @@ include "layouts/header.php";
                             Image
                         </th>
                         <th>Category</th>
-                        <th>Created At</th>
+                        <th>Featured</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -94,13 +105,31 @@ include "layouts/header.php";
                                 <?php echo $data['category_id'] ?>
                             </td>
                             <td>
-                                <?php echo $data['created_at'] ?>
+                                <?php
+                                if ($data['featured'] == 1) :
+                                ?>
+                                    <a href="view-blogs.php?id=<?php echo $data['id'] ?>&featured=0">
+                                        <button class="btn btn-primary">
+                                            Yes
+                                        </button>
+                                    </a>
+                                <?php
+                                else :
+                                ?>
+                                    <a href="view-blogs.php?id=<?php echo $data['id'] ?>&featured=1">
+                                        <button class="btn btn-warning">
+                                            No
+                                        </button>
+                                    </a>
+                                <?php
+                                endif;
+                                ?>
                             </td>
                             <td>
                                 <?php
                                 if ($data['status'] == 1) :
                                 ?>
-                                    <a href="view-announcement.php?id=<?php echo $data['id'] ?>&status=0">
+                                    <a href="view-blogs.php?id=<?php echo $data['id'] ?>&status=0">
                                         <button class="btn btn-primary">
                                             Active
                                         </button>
@@ -108,7 +137,7 @@ include "layouts/header.php";
                                 <?php
                                 else :
                                 ?>
-                                    <a href="view-announcement.php?id=<?php echo $data['id'] ?>&status=1">
+                                    <a href="view-blogs.php?id=<?php echo $data['id'] ?>&status=1">
                                         <button class="btn btn-warning">
                                             Inactive
                                         </button>
@@ -118,12 +147,12 @@ include "layouts/header.php";
                                 ?>
                             </td>
                             <td>
-                                <a href="view-announcement.php?id=<?php echo $data['id'] ?>">
+                                <a href="view-blogs.php?id=<?php echo $data['id'] ?>">
                                     <button class="btn">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </a>
-                                <a href="add-announcement.php?id=<?php echo $data['id']; ?>">
+                                <a href="add-blog.php?id=<?php echo $data['id']; ?>">
                                     <button class="btn">
                                         <i class="fa fa-pen"></i>
                                     </button>
