@@ -31,7 +31,7 @@ if (isset($_POST['save'])) {
             header("LOCATION:view-announcement.php");
         } else {
             $error = 1;
-            $msg = "Internal server error";
+            $msg = "Intcernal server error";
         }
     } else {
         // some error

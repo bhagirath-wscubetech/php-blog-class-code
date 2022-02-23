@@ -105,6 +105,40 @@
                         </ul>
                     </li>
                     <li>
+                        <i class="far fa-newspaper"></i>
+                        Blog
+                        <i class="fas fa-sort-down"></i>
+                        <ul class="child bg-dark">
+                            <li>
+                                <a href="add-blog.php">
+                                    Add
+                                </a>
+                            </li>
+                            <li>
+                                <a href="view-blogs.php">
+                                    View
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <i class="far fa-newspaper"></i>
+                        Categories
+                        <i class="fas fa-sort-down"></i>
+                        <ul class="child bg-dark">
+                            <li>
+                                <a href="add-category.php">
+                                    Add
+                                </a>
+                            </li>
+                            <li>
+                                <a href="view-category.php">
+                                    View
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <i class="fab fa-leanpub"></i>
                         Courses
                         <i class="fas fa-sort-down"></i>
