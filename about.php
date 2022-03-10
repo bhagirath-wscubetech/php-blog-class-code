@@ -2,6 +2,9 @@
 include "app/database.php";
 include "app/helper.php";
 include "layout/header.php";
+$sel = "SELECT * FROM about_us";
+$exe = mysqli_query($conn, $sel);
+$data = mysqli_fetch_assoc($exe);
 ?>
 <!-- Featured Blogs -->
 <section class="container mt-4">
@@ -13,24 +16,15 @@ include "layout/header.php";
     </nav>
     <div class="row shadow p-2">
         <div class="col-lg-5">
-            <img src="https://picsum.photos/1000/700?random=3" alt="" width="100%" />
+            <div class="sticky-top">
+                <img src="images/about/<?php echo $data['image'] ?>" alt="" width="100%" />
+            </div>
         </div>
         <div class="col-lg-7">
             <h2 class="col-12 text-center">
                 About Us
             </h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur debitis optio blanditiis necessitatibus! Est eius aliquid ea accusantium numquam ad, vel iste saepe voluptates, repudiandae sit minima quasi culpa quibusdam!
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur debitis optio blanditiis necessitatibus! Est eius aliquid ea accusantium numquam ad, vel iste saepe voluptates, repudiandae sit minima quasi culpa quibusdam!
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur debitis optio blanditiis necessitatibus! Est eius aliquid ea accusantium numquam ad, vel iste saepe voluptates, repudiandae sit minima quasi culpa quibusdam!
-            </p>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur debitis optio blanditiis necessitatibus! Est eius aliquid ea accusantium numquam ad, vel iste saepe voluptates, repudiandae sit minima quasi culpa quibusdam!
-            </p>
+            <?php echo $data['content'] ?>
         </div>
     </div>
 </section>

@@ -16,7 +16,7 @@
 
 <body>
     <!-- Header section -->
-    <section class="container-fluid bg-primary sticky-top">
+    <section class="container-fluid bg-primary sticky-top" style="z-index: 99999;">
         <nav class="container navbar navbar-expand-sm navbar-dark bg-primary">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#" style="font-weight: bold;">My Blogs</a>

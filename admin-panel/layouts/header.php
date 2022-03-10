@@ -76,7 +76,7 @@
                         <i class="fas fa-sort-down"></i>
                         <ul class="child bg-dark">
                             <li>
-                                <a href="">
+                                <a href="update-about.php">
                                     About Us
                                 </a>
                             </li>
