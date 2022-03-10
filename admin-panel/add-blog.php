@@ -22,7 +22,7 @@ if (isset($_POST['save'])) {
         $path = "../images/blog/";
         $destination = $path . $imageName;
         $flag = move_uploaded_file($tmpPath, $destination);
-        if($flag){
+        if ($flag) {
             // new image uploaded, then delete the old one
             unlink("../images/blog/$oldName");
         }
