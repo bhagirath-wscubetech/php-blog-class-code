@@ -1,6 +1,14 @@
 <?php
 include "../app/database.php";
 include "../app/helper.php";
+
+// pagination 
+$page = $_GET['page'] ?? 0; // null safe operator
+$limit = 10;
+$start = $page * $limit;
+// ----------
+
+
 $error = 0;
 $msg = "";
 $id = $_GET['id'];
@@ -111,7 +119,8 @@ include "layouts/header.php";
                         </tr>
                     </thead>
                     <?php
-                    $sel = "SELECT * FROM announcements WHERE trashed = 0 LIMIT 0,10";
+                    $sel = "SELECT * FROM announcements LIMIT $start,$limit";
+                    echo $sel;
                     // start , offset
                     $exe = mysqli_query($conn, $sel);
                     ?>
@@ -177,15 +186,38 @@ include "layouts/header.php";
 
                     </tbody>
                 </table>
-                <!-- <nav aria-label="Page navigation example">
+                <!-- 
+                    Calculate the totol number of total rows in ann table.
+                 -->
+                <?php
+                $selRows = "SELECT COUNT(*) as total_rows FROM announcements";
+                $exeRow = mysqli_query($conn, $selRows);
+                $fetchRows = mysqli_fetch_array($exeRow);
+                $totalPages = ceil($fetchRows['total_rows'] / $limit);
+                ?>
+                <nav aria-label="Page navigation example">
                     <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        <li class="page-item <?php echo $page == 0 ? 'disabled' : '' ?>">
+                            <a class="page-link" href="view-announcement.php?page=<?php echo $page - 1 ?>">
+                                Previous
+                            </a>
+                        </li>
+                        <?php
+                        for ($i = 0; $i < $totalPages; $i++) :
+                        ?>
+                            <li class="page-item <?php echo $page == $i ? 'active text-white' : '' ?>">
+                                <a class="page-link" href="view-announcement.php?page=<?php echo $i ?>">
+                                    <?php echo $i + 1 ?>
+                                </a>
+                            </li>
+                        <?php
+                        endfor;
+                        ?>
+                        <li class="page-item <?php echo $page == ($totalPages - 1) ? 'disabled' : '' ?>">
+                            <a class="page-link" href="view-announcement.php?page=<?php echo $page + 1 ?>">Next</a>
+                        </li>
                     </ul>
-                </nav> -->
+                </nav>
             </form>
         </div>
     </div>
