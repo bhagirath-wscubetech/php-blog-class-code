@@ -11,7 +11,11 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" />
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/responsive.css" />
-    <title>Hello, world!</title>
+    <title>
+        <?php 
+            echo $title ?? "Blogger";
+        ?>
+    </title>
 </head>
 
 <body>

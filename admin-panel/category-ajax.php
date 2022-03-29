@@ -1,6 +1,7 @@
 <?php
 include "../app/database.php";
 include "../app/helper.php";
+error_reporting(E_ALL);
 /* 
     case: 1: Status, 2: Delete
     id: (always)
@@ -12,8 +13,12 @@ if ($case == 1) {
     $id = $_GET['data_id'];
     $newStatus = $_GET['new_status'];
     if (isset($id) && isset($newStatus)) {
-        $qry = "UPDATE categories SET status = $newStatus WHERE id = $id";
-        $flag = mysqli_query($conn, $qry);
+        try {
+            $qry = "UPDATE categories SET status = $newStatus WHERE id = $id";
+            $flag = mysqli_query($conn, $qry);
+        } catch (\Exception $err) {
+            $flag = false;
+        }
         $response = [];
         if ($flag == true) {
             $response = [
@@ -32,7 +37,23 @@ if ($case == 1) {
             'msg' => "Incomplete data"
         ];
     }
-    echo json_encode($response);
 } else {
+    $response = [];
     // delete
+    $id = $_GET['data_id'];
+    $qry = "DELETE FROM categories WHERE id = $id";
+    $flag = mysqli_query($conn, $qry);
+    if ($flag == true) {
+        $response = [
+            'error' => 0,
+            'msg' => "Data deleted successfully"
+        ];
+    } else {
+        $response = [
+            'error' => 1,
+            'msg' => "Unable to delete the data. Internal server error"
+        ];
+    }
 }
+
+echo json_encode($response);

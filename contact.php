@@ -1,4 +1,5 @@
 <?php
+$title = "Blogger - Contact Us";
 include "app/database.php";
 include "app/helper.php";
 include "layout/header.php";

@@ -99,7 +99,7 @@ include "layouts/header.php";
                             </td>
                             <td>
                                 <!-- <a href="view-category.php?id=<?php echo $data['id'] ?>"> -->
-                                <button class="btn">
+                                <button class="btn" onclick="deleteData(this,<?php echo $data['id'] ?>)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 <!-- </a> -->
@@ -133,19 +133,13 @@ include "layouts/footer.php";
                 data_id: id,
                 new_status: newStatus
             },
-            beforeSend:function(){
-                $("#msg-box").slideUp(100);
-            }, 
+            beforeSend: function() {
+                hideAlert();
+            },
             success: function(respo) {
                 var response = JSON.parse(respo);
                 if (response.error == 0) {
-                    // all okay
-                    $("#msg-box")
-                        .slideDown()
-                        .addClass("alert-success")
-                        .removeClass("alert-danger")
-                        .children("strong")
-                        .text(response.msg);
+                    showAlert(0, response.msg);
                     if (newStatus == 1) {
                         // old inactive new acitve
                         $(btn).text("Active").removeClass("btn-warning").addClass("btn-primary").data("new-status", 0)
@@ -155,14 +149,34 @@ include "layouts/footer.php";
                         $(btn).text("Inactive").addClass("btn-warning").removeClass("btn-primary").data("new-status", 1)
                     }
                 } else {
-                    $("#msg-box")
-                        .slideDown()
-                        .addClass("alert-danger")
-                        .removeClass("alert-success")
-                        .children("strong")
-                        .text(response.msg);
+                    showAlert(1, response.msg);
+                }
+            }
+        })
+    }
+
+    function deleteData(btn, id) {
+        $.ajax({
+            type: "get",
+            url: "category-ajax.php",
+            data: {
+                case: 2,
+                data_id: id
+            },
+            beforeSend: function() {
+                hideAlert();
+            },
+            success: function(respo) {
+                var response = JSON.parse(respo);
+                if (response.error == 0) {
+                    showAlert(0, response.msg);
+                    $(btn).parents("tr").remove();
+                } else {
+                    showAlert(1, response.msg);
                 }
             }
         })
     }
 </script>
+
+<!-- showAlert() -->

@@ -48,8 +48,8 @@ if (isset($_POST['del-all'])) {
          */
         $allId = implode(",", $ids);
         // multiple delete
-        // $qry = "DELETE FROM announcements WHERE id IN($allId)";
-        $qry = "UPDATE announcements SET trashed = 1 WHERE id IN($allId)";
+        $qry = "DELETE FROM announcements WHERE id IN($allId)";
+        // $qry = "UPDATE announcements SET trashed = 1 WHERE id IN($allId)";
         $flag = mysqli_query($conn, $qry);
         if ($flag == true) {
             $error = 0;
