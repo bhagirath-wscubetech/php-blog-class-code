@@ -3,6 +3,8 @@ $title = "Blogger - Annoucement";
 include "app/database.php";
 include "app/helper.php";
 include "layout/header.php";
+
+unset($_SESSION['name']);
 ?>
 <!-- Header section -->
 <!-- Featured Blogs -->

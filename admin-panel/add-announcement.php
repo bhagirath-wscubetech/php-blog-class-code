@@ -6,8 +6,8 @@ $msg = "";
 $id = $_GET['id'];
 // 0 No error, 1: Some error
 if (isset($_POST['save'])) {
-    $dataTitle = $_POST['title'];
-    $dataDesc = $_POST['desc'];
+    $dataTitle = mysqli_escape_string($conn, $_POST['title']);
+    $dataDesc = mysqli_escape_string($conn, $_POST['desc']);
     if (!empty($dataTitle) && !empty($dataDesc)) {
         try {
             // try starts here
@@ -31,7 +31,7 @@ if (isset($_POST['save'])) {
             header("LOCATION:view-announcement.php");
         } else {
             $error = 1;
-            $msg = "Intcernal server error";
+            $msg = "Internal server error";
         }
     } else {
         // some error

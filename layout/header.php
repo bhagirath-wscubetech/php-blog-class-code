@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -12,8 +11,8 @@
     <link rel="stylesheet" href="css/custom.css" />
     <link rel="stylesheet" href="css/responsive.css" />
     <title>
-        <?php 
-            echo $title ?? "Blogger";
+        <?php
+        echo $title ?? "Blogger";
         ?>
     </title>
 </head>
@@ -44,19 +43,37 @@
                         <li class="nav-item">
                             <a class="nav-link" href="announcement.php">Announcements</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Profile
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#">Change Password</a></li>
-                                <li><a class="dropdown-item" href="#">Edit Profile</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-                        </li>
+                        <?php
+                        if (isset($_SESSION['user_id'])) :
+                        ?>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Profile
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                    <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                                </ul>
+                            </li>
+                        <?php
+                        else :
+                        ?>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" role="button" aria-expanded="false">
+                                    Login
+                                </a>
+                            <li class="nav-item">
+                                <a class="nav-link" href="register.php" role="button" aria-expanded="false">
+                                    Register
+                                </a>
+                            </li>
+                        <?php
+                        endif;
+                        ?>
                     </ul>
                 </div>
             </div>
