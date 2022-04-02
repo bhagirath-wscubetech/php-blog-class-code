@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -56,14 +57,14 @@
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
-                                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                                    <li><a class="dropdown-item" href="logout.php">Logout</a></li>
                                 </ul>
                             </li>
                         <?php
                         else :
                         ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="#" role="button" aria-expanded="false">
+                                <a class="nav-link" href="login.php" role="button" aria-expanded="false">
                                     Login
                                 </a>
                             <li class="nav-item">

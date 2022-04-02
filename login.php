@@ -3,60 +3,28 @@ include "app/database.php";
 include "app/helper.php";
 $msg = "";
 $error = 0;
-if (isset($_POST['register'])) {
-    // register the user
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $c_password = $_POST['c_password'];
-    if (!empty($name) && !empty($email) && !empty($password) && !empty($c_password)) {
-        // all okay
-        if ($password == $c_password) {
-            // $selUser = "SELECT * FROM users WHERE email = '$email'";
-            $selUser = sprintf(
-                "SELECT * FROM users WHERE email ='%s'",
-                mysqli_real_escape_string($conn, $email)
-            );
-            $exeUser = mysqli_query($conn, $selUser);
-            $total = mysqli_num_rows($exeUser);
-            if ($total == 0) {
-                // new user
-                // $qry = "INSERT INTO user SET name = '$name', email = '$email', password = '$password'";
-                $qry = sprintf(
-                    "INSERT INTO users SET name = '%s', email = '%s', password = '%s'",
-                    mysqli_real_escape_string($conn, $name),
-                    mysqli_real_escape_string($conn, $email),
-                    mysqli_real_escape_string($conn, md5($password)),
-                );
-                $flag = mysqli_query($conn, $qry);
-                if ($flag) {
-                    $selUser = sprintf(
-                        "SELECT * FROM users WHERE email ='%s'",
-                        mysqli_real_escape_string($conn, $email)
-                    );
-                    $exeUser = mysqli_query($conn, $selUser);
-                    $userData = mysqli_fetch_assoc($exeUser);
-                    $_SESSION['user_id'] = $userData['id'];
-                    $_SESSION['user_name'] = $userData['name'];
-                    setUserLog($userData['id']);
-                    header("LOCATION:index.php");
-                } else {
-                    $msg = "Unable to register!";
-                    $error = 1;
-                }
-            } else {
-                // existing user
-                $msg = "User already exists";
-                $error = 1;
-            }
+if (isset($_POST['login'])) {
+    // register the user    
+    $email = mysqli_escape_string($conn, $_POST['email']);
+    $password = md5(mysqli_escape_string($conn, $_POST['password']));
+    if (!empty($email) && !empty($password)) {
+        // login    
+        $sel = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
+        $exe = mysqli_query($conn, $sel);
+        $data = mysqli_fetch_assoc($exe);
+        if (isset($data['id'])) {
+            $_SESSION['user_id'] = $data['id'];
+            $_SESSION['user_name'] = $data['name'];
+            // p(get_client_ip());
+            setUserLog($data['id']);
+            header("LOCATION:index.php");
         } else {
-            $msg = "Password and Confirm Password must match";
             $error = 1;
+            $msg = "Invalid credentails";
         }
     } else {
-        // throw error
-        $msg = "Please fill all the required data";
         $error = 1;
+        $msg = "Please enter all required data";
     }
 }
 ?>
@@ -251,15 +219,9 @@ if (isset($_POST['register'])) {
                 ?>
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Register Today</h3>
+                        <h3>Login</h3>
                         <p>Fill in the data below.</p>
                         <form class="requires-validation" method="post" novalidate>
-
-                            <div class="col-md-12">
-                                <input class="form-control" type="text" name="name" placeholder="Full Name" required>
-                                <div class="valid-feedback">Name field is valid!</div>
-                                <div class="invalid-feedback">Name field cannot be blank!</div>
-                            </div>
 
                             <div class="col-md-12">
                                 <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
@@ -267,52 +229,15 @@ if (isset($_POST['register'])) {
                                 <div class="invalid-feedback">Email field cannot be blank!</div>
                             </div>
 
-                            <!-- <div class="col-md-12">
-                                <select class="form-select mt-3" required>
-                                    <option selected disabled value="">Position</option>
-                                    <option value="jweb">Junior Web Developer</option>
-                                    <option value="sweb">Senior Web Developer</option>
-                                    <option value="pmanager">Project Manager</option>
-                                </select>
-                                <div class="valid-feedback">You selected a position!</div>
-                                <div class="invalid-feedback">Please select a position!</div>
-                            </div> -->
                             <div class="col-md-12">
                                 <input class="form-control" type="password" name="password" placeholder="Password" required>
                                 <div class="valid-feedback">Password field is valid!</div>
                                 <div class="invalid-feedback">Password field cannot be blank!</div>
                             </div>
 
-                            <div class="col-md-12">
-                                <input class="form-control" type="password" name="c_password" placeholder="Confirm Password" required>
-                                <div class="valid-feedback">Password field is valid!</div>
-                                <div class="invalid-feedback">Password field cannot be blank!</div>
-                            </div>
-
-
-                            <!-- <div class="col-md-12 mt-3">
-                                <label class="mb-3 mr-1" for="gender">Gender: </label>
-
-                                <input type="radio" class="btn-check" name="gender" id="male" autocomplete="off" required>
-                                <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
-
-                                <input type="radio" class="btn-check" name="gender" id="female" autocomplete="off" required>
-                                <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
-
-                                <input type="radio" class="btn-check" name="gender" id="secret" autocomplete="off" required>
-                                <label class="btn btn-sm btn-outline-secondary" for="secret">Secret</label>
-                                <div class="valid-feedback mv-up">You selected a gender!</div>
-                                <div class="invalid-feedback mv-up">Please select a gender!</div>
-                            </div> -->
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                                <label class="form-check-label">I confirm that all data are correct</label>
-                                <div class="invalid-feedback">Please confirm that the entered data are all correct!</div>
-                            </div>
 
                             <div class="form-button mt-3">
-                                <button id="submit" type="submit" name="register" class="btn btn-primary">Register</button>
+                                <button id="submit" type="submit" name="login" class="btn btn-primary">Login</button>
                             </div>
                         </form>
                     </div>
