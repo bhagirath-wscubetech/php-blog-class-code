@@ -1,4 +1,6 @@
 <?php
+$baseUrl = "http://localhost/blog";
+include "mail.php";
 session_start();
 function p($data)
 {
@@ -26,4 +28,20 @@ function get_client_ip()
     else
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
+}
+
+
+function getResetToken()
+{
+    global $conn;
+    $bytes = random_bytes(40);
+    $token = bin2hex($bytes);
+    $sel = "SELECT id FROM reset_password WHERE token = '$token'";
+    $exe = mysqli_query($conn, $sel);
+    $count = mysqli_num_rows($exe);
+    if ($count == 1) {
+        return getResetToken();
+    } else {
+        return $token;
+    }
 }

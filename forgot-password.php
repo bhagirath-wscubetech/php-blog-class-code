@@ -3,28 +3,42 @@ include "app/database.php";
 include "app/helper.php";
 $msg = "";
 $error = 0;
-if (isset($_POST['login'])) {
-    // register the user    
-    $email = mysqli_escape_string($conn, $_POST['email']);
-    $password = md5(mysqli_escape_string($conn, $_POST['password']));
-    if (!empty($email) && !empty($password)) {
-        // login    
-        $sel = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
-        $exe = mysqli_query($conn, $sel);
-        $data = mysqli_fetch_assoc($exe);
-        if (isset($data['id'])) {
-            $_SESSION['user_id'] = $data['id'];
-            $_SESSION['user_name'] = $data['name'];
-            // p(get_client_ip());
-            setUserLog($data['id']);
-            header("LOCATION:index.php");
-        } else {
-            $error = 1;
-            $msg = "Invalid credentails";
+if (isset($_POST['send'])) {
+    $email = $_POST['email'];
+    $sel = "SELECT * FROM users WHERE email = '$email'";
+    $exe = mysqli_query($conn, $sel);
+    $userData = mysqli_fetch_assoc($exe);
+    p($userData);
+    if (isset($userData['id'])) {
+        // user exists
+        $userId = $userData['id'];
+        $token = getResetToken();
+        $data = mysqli_fetch_assoc(
+            mysqli_query(
+                $conn,
+                "SELECT * FROM reset_password WHERE user_id = $userId"
+            )
+        );
+        try {
+            if (!is_null($data)) {
+                $upd = "UPDATE reset_password SET token = '$token' WHERE user_id = $userId";
+                $flag = mysqli_query($conn, $upd);
+            } else {
+                $ins = "INSERT INTO reset_password SET user_id = $id, token = '$token'";
+                $flag = mysqli_query($conn, $ins);
+            }
+        } catch (\Exception $err) {
+            p($err->getMessage());
         }
+        $url = "$baseUrl/reset-password.php?token=$token";
+        $sub = "Reset passowrd link";
+        $msg = "Please click on the button to reset the password <a href='$url'> <button> Click Me </button> </a>";
+        sendEmail($email, $userData['name'], $sub, $msg);
+        header("LOCATION:success.php");
     } else {
+        // wrong email
+        $msg = "Invalid Email";
         $error = 1;
-        $msg = "Please enter all required data";
     }
 }
 ?>
@@ -201,7 +215,7 @@ if (isset($_POST['login'])) {
     </style>
 </head>
 
-<body>
+<body style="color:white">
     <div class="form-body">
         <div class="row">
 
@@ -219,28 +233,20 @@ if (isset($_POST['login'])) {
                 ?>
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Login</h3>
-                        <p>Fill in the data below.</p>
+                        <h3>Forgot Password ?</h3>
+                        <p>No problem, it happens. Please give us your email</p>
                         <form class="requires-validation" method="post" novalidate>
 
                             <div class="col-md-12">
-                                <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
+                                <input class="form-control" value="<?php echo $email ?>" type="email" name="email" placeholder="E-mail Address" required>
                                 <div class="valid-feedback">Email field is valid!</div>
                                 <div class="invalid-feedback">Email field cannot be blank!</div>
                             </div>
 
-                            <div class="col-md-12">
-                                <input class="form-control" type="password" name="password" placeholder="Password" required>
-                                <div class="valid-feedback">Password field is valid!</div>
-                                <div class="invalid-feedback">Password field cannot be blank!</div>
-                            </div>
-
-
                             <div class="form-button mt-3">
-                                <button id="submit" type="submit" name="login" class="btn btn-primary">Login</button>
-                                <a href="forgot-password.php">
-                                    <button type="button" name="" class="btn btn-primary">Forgot Password</button>
-                                </a>
+                                <button id="submit" type="submit" name="send" class="btn btn-primary">
+                                    Send Email
+                                </button>
                             </div>
                         </form>
                     </div>
